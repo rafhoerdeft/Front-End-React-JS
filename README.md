@@ -1,3 +1,15 @@
+RUN:
+- npx create-react-app nama-project
+- npm i react-router-dom
+- npm i axios
+- npm i bulma ==> CSS style
+- npm i jwt-decode
+- npm i react-reveal --legacy-peer-deps ==> animation effect
+- npm i --save @fortawesome/fontawesome-svg-core
+- npm install --save @fortawesome/free-solid-svg-icons
+- npm install --save @fortawesome/react-fontawesome
+- npm i --save @fortawesome/free-regular-svg-icons
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
