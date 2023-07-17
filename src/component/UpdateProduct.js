@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useAuth } from '../middleware/AuthProvider';
 
 const UpdateProduct = () => {
     const [title, setTitle] = useState("");
@@ -8,10 +9,15 @@ const UpdateProduct = () => {
     const [fileName, setFileName] = useState("No file uploaded");
     const [preview, setPreview] = useState("");
     const { id } = useParams();
+    const { token, axiosJWT, refreshToken } = useAuth();
     const navigate = useNavigate();
 
     const getProductById = async () => {
-        const res = await axios.get(`http://localhost:8000/products/${id}`);
+        const res = await axiosJWT.get(`http://localhost:8000/products/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         setTitle(res.data.name);
         setFile(res.data.image);
         setFileName(res.data.image);
@@ -32,19 +38,21 @@ const UpdateProduct = () => {
         formData.append("title", title);
 
         try {
-            await axios.patch(`http://localhost:8000/products/${id}`, formData, {
+            await axiosJWT.patch(`http://localhost:8000/products/${id}`, formData, {
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 }
             });
-            navigate("/"); // redirect to home
+            navigate("/product"); // redirect to home
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        getProductById();
+        refreshToken()
+        getProductById()
     }, [])
 
     return (
@@ -116,7 +124,7 @@ const UpdateProduct = () => {
                         <div className="column is-one-fifth">
                             <div className="field">
                                 <div className="control">
-                                    <Link to="/" className="button is-fullwidth is-link">
+                                    <Link to="/product" className="button is-fullwidth is-link">
                                         <span className="icon is-small">
                                             <i className="fas fa-arrow-left"></i>
                                         </span>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from '../middleware/AuthProvider';
 
 const AddProduct = () => {
     const [title, setTitle] = useState("");
     const [file, setFile] = useState("");
     const [fileName, setFileName] = useState("No file uploaded");
     const [preview, setPreview] = useState("");
+    const {axiosJWT} = useAuth();
     const navigate = useNavigate();
 
     const loadImage = (e) => {
@@ -23,12 +25,12 @@ const AddProduct = () => {
         formData.append("title", title);
 
         try {
-            await axios.post("http://localhost:8000/products", formData, {
+            await axiosJWT.post("http://localhost:8000/products", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            navigate("/"); // redirect to home
+            navigate("/product"); // redirect to home
         } catch (error) {
             console.log(error);
         }
@@ -113,7 +115,7 @@ const AddProduct = () => {
                         <div className="column is-one-fifth">
                             <div className="field">
                                 <div className="control">
-                                    <Link to="/" className="button is-fullwidth is-link">
+                                    <Link to="/product" className="button is-fullwidth is-link">
                                         <span className="icon is-small">
                                             <i className="fas fa-arrow-left"></i>
                                         </span>

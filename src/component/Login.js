@@ -1,23 +1,51 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import $ from "jquery";
+import { useAuth } from '../middleware/AuthProvider';
 
 const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+    const { refreshToken } = useAuth();
+    const navigate = useNavigate();
+
+    const auth = async (e) => {
+        e.preventDefault(); // agar tidak reload
+        try {
+            await axios.post('http://localhost:8000/login', {
+                email: email,
+                password: password
+            });
+            refreshToken(); // simpan data token pada context
+            navigate("/product"); // untuk redirect
+        } catch (error) {
+            if (error.response) {
+                setErrorMsg(error.response.data.msg);
+                $('#alrt').fadeTo(3000, 500).slideUp(500);
+            }
+        }
+    }
+
     return (
         <section className="hero has-background-grey-light is-fullheight is-fullwidth">
             <div className="hero-body">
                 <div className="container">
                     <div className="columns is-centered">
                         <div className="column is-4-desktop">
-                            <form action="" className="box">
+                            <form onSubmit={auth} action="" className="box">
+                                <p className="has-text-centered message is-danger" id='alrt'>{errorMsg}</p>
                                 <div className="field mt-5">
-                                    <label className="label">Email or Username</label>
+                                    <label className="label">Email</label>
                                     <div className="controls">
-                                        <input type="text" className="input" placeholder="Username" />
+                                        <input type="text" className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </div>
                                 </div>
                                 <div className="field mt-5">
                                     <label className="label">Password</label>
                                     <div className="controls">
-                                        <input type="password" className="input" placeholder="********" />
+                                        <input type="password" className="input" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)} />
                                     </div>
                                 </div>
                                 <div className="field mt-5"><button className="button is-success is-fullwidth">Login</button></div>

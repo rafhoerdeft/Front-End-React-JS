@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import $ from "jquery";
 
 function Register() {
     const [name, setName] = useState('');
@@ -11,7 +12,7 @@ function Register() {
     const navigate = useNavigate();
 
     const register = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // agar tidak reload
         try {
             await axios.post('http://localhost:8000/users', {
                 name: name,
@@ -19,10 +20,11 @@ function Register() {
                 password: password,
                 confPassword: confPassword
             });
-            navigate.push("/"); // untuk redirect
+            navigate("/"); // untuk redirect
         } catch (error) {
             if (error.response) {
                 setErrorMsg(error.response.data.msg);
+                $('#alrt').fadeTo(3000, 500).slideUp(500);
             }
         }
     }
@@ -34,7 +36,7 @@ function Register() {
                     <div className="columns is-centered">
                         <div className="column is-4-desktop">
                             <form onSubmit={register} className="box">
-                                <p className="has-text-centered message is-danger">{errorMsg}</p>
+                                <p className="has-text-centered message is-danger" id='alrt'>{errorMsg}</p>
                                 <div className="field mt-5">
                                     <label className="label">Name</label>
                                     <div className="controls">
@@ -56,7 +58,7 @@ function Register() {
                                 <div className="field mt-5">
                                     <label className="label">Confirm Password</label>
                                     <div className="controls">
-                                        <input type="password" className="input" placeholder="********" value={confPassword} onChange={(e) => setConfPassword(e.target.confPassword)} />
+                                        <input type="password" className="input" placeholder="********" value={confPassword} onChange={(e) => setConfPassword(e.target.value)} />
                                     </div>
                                 </div>
                                 <div className="field mt-5"><button className="button is-success is-fullwidth">Register</button></div>

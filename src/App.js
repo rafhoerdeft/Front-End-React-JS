@@ -5,22 +5,35 @@ import UpdateProduct from "./component/UpdateProduct";
 import Login from "./component/Login";
 import Register from "./component/Register";
 import Navbar from "./component/Navbar";
+import { AuthProvider } from "./middleware/AuthProvider";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/product" element={
-          <div>
-            <Navbar />
-            <ProductList />
-          </div>
-        } />
-        <Route path="/product/add" element={<AddProduct />} />
-        <Route path="/product/edit/:id" element={<UpdateProduct />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/product" element={
+            <div>
+              <Navbar />
+              <ProductList />
+            </div>
+          } />
+          <Route path="/product/add" element={
+            <div>
+              <Navbar />
+              <AddProduct />
+            </div>
+          } />
+          <Route path="/product/edit/:id" element={
+            <div>
+              <Navbar />
+              <UpdateProduct />
+            </div>
+          } />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

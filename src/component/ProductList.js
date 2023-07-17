@@ -1,36 +1,48 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useAuth } from '../middleware/AuthProvider';
 
 const ProductList = () => {
     // index 1 = State name -- ex: product
     // index 2 = name function to setState -- ex: setProduct
     // in useState() filled initial value -- ex: "" / [] / 0
     const [products, setProducts] = useState([]);
+    const { token, axiosJWT, refreshToken } = useAuth();
+
+    useEffect(() => {
+        refreshToken()
+        getProducts()
+    }, [token, axiosJWT]); // useEffect akan run apabila ada perubahan pada token atau axiosJWT
 
     const getProducts = async () => {
-        const response = await axios.get("http://localhost:8000/products");
+        // menggunakan axiosJWT pada middleware krn perlu token utk mengakses
+        const response = await axiosJWT.get("http://localhost:8000/products", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         setProducts(response.data);
     }
 
     const deleteProduct = async (productId) => {
         try {
-            await axios.delete(`http://localhost:8000/products/${productId}`);
+            await axios.delete(`http://localhost:8000/products/${productId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             getProducts();
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(() => {
-        getProducts();
-    }, []);
-
     return (
         <div className="container mt-5">
             <div className="columns">
                 <div className="column">
-                    <Link to="/add" className="button is-primary">
+                    <Link to="/product/add" className="button is-primary">
                         <span className="icon is-small"><i className="fas fa-plus"></i></span>
                         <span>Add New Item</span>
                     </Link>
