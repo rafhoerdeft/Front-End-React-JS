@@ -4,8 +4,9 @@ import AddProduct from "./component/AddProduct";
 import UpdateProduct from "./component/UpdateProduct";
 import Login from "./component/Login";
 import Register from "./component/Register";
-import Navbar from "./component/Navbar";
+import Navbar from "./component/Layout/Navbar";
 import { AuthProvider } from "./middleware/AuthProvider";
+import { Layout } from "./component/Layout/Layout";
 
 function App() {
   return (
@@ -15,22 +16,19 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/product" element={
-            <div>
-              <Navbar />
+            <Layout>
               <ProductList />
-            </div>
+            </Layout>
           } />
           <Route path="/product/add" element={
-            <div>
-              <Navbar />
+            <Layout>
               <AddProduct />
-            </div>
+            </Layout>
           } />
           <Route path="/product/edit/:id" element={
-            <div>
-              <Navbar />
+            <Layout>
               <UpdateProduct />
-            </div>
+            </Layout>
           } />
         </Routes>
       </AuthProvider>
