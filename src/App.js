@@ -4,7 +4,6 @@ import AddProduct from "./component/AddProduct";
 import UpdateProduct from "./component/UpdateProduct";
 import Login from "./component/Login";
 import Register from "./component/Register";
-import Navbar from "./component/Layout/Navbar";
 import { AuthProvider } from "./middleware/AuthProvider";
 import { Layout } from "./component/Layout/Layout";
 
