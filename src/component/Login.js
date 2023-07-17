@@ -1,11 +1,12 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import $ from "jquery";
 import { useAuth } from '../middleware/AuthProvider';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const email = useRef();
+    // const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const { refreshToken } = useAuth();
@@ -15,7 +16,7 @@ const Login = () => {
         e.preventDefault(); // agar tidak reload
         try {
             await axios.post('http://localhost:8000/login', {
-                email: email,
+                email: email.current.value,
                 password: password
             });
             refreshToken(); // simpan data token pada context
@@ -28,6 +29,10 @@ const Login = () => {
         }
     }
 
+    useEffect(() => {
+        email.current.focus()
+    }, []);
+
     return (
         <section className="hero has-background-grey-light is-fullheight is-fullwidth">
             <div className="hero-body">
@@ -39,7 +44,7 @@ const Login = () => {
                                 <div className="field mt-5">
                                     <label className="label">Email</label>
                                     <div className="controls">
-                                        <input type="text" className="input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                        <input type="text" className="input" placeholder="Email" ref={email} />
                                     </div>
                                 </div>
                                 <div className="field mt-5">
