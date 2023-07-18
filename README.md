@@ -3,6 +3,9 @@ RUN:
 - npm i react-router-dom
 - npm i axios
 - npm i bulma ==> CSS style
+- npm i react-hook-form
+- npm i react-spinners
+- npm i react-spinner-overlay
 - npm i jwt-decode
 - npm i react-reveal --legacy-peer-deps ==> animation effect
 - npm i --save @fortawesome/fontawesome-svg-core
