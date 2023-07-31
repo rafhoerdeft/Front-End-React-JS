@@ -4,6 +4,7 @@ RUN:
 - npm i axios
 - npm i bulma ==> CSS style
 - npm i react-hook-form
+- npm i react-paginate
 - npm i react-spinners
 - npm i react-spinner-overlay
 - npm i jwt-decode
